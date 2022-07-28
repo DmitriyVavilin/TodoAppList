@@ -11,11 +11,14 @@ form.addEventListener('submit',addTask);
 tasksList.addEventListener('click', deleteTask);
 
 
+//Отмечаем задачу завершенной
+
+tasksList.addEventListener('click', doneTask)
+
 // Функция
 function addTask(event) {
     //Отменяем отправку формы!
     event.preventDefault()
-    console.log('Submit!!!')
 
     // Достаем текст задачи из поля ввода
 
@@ -51,7 +54,6 @@ function addTask(event) {
 function deleteTask(event) {
     //Проверяем что клик был по кнопке удалить
     if(event.target.dataset.action === 'delete') {
-        console.log('DELETE!!!')
       const parentNode =  event.target.closest('.list-group-item')
       parentNode.remove()
     }
@@ -59,4 +61,13 @@ function deleteTask(event) {
     if(tasksList.children.length === 1) {
         emptyList.classList.remove('none')
     };
+}
+
+function doneTask() {
+    //Проверяем что клик был по кнопке выполненно
+    if(event.target.dataset.action === 'done') {
+        const parentNode = event.target.closest('.list-group-item');
+     const taskTitle = parentNode.querySelector('.task-title')
+     taskTitle.classList.toggle('task-title--done')
+    }
 }
