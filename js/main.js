@@ -10,10 +10,13 @@ form.addEventListener('submit',addTask);
 // Удаление задачи
 tasksList.addEventListener('click', deleteTask);
 
-
 //Отмечаем задачу завершенной
 
 tasksList.addEventListener('click', doneTask)
+
+if(localStorage.getItem('tasksHTML')) {
+    tasksList.innerHTML = localStorage.getItem('tasksHTML')
+}
 
 // Функция
 function addTask(event) {
@@ -49,25 +52,33 @@ function addTask(event) {
     if(tasksList.children.length > 1) {
         emptyList.classList.add('none')
     };
+    saveHTMLtoLs()
 };
 
 function deleteTask(event) {
-    //Проверяем что клик был по кнопке удалить
-    if(event.target.dataset.action === 'delete') {
-      const parentNode =  event.target.closest('.list-group-item')
-      parentNode.remove()
-    }
+    //Проверяем что клик был НЕ по кнопке удалить
+    if(event.target.dataset.action !== 'delete') return;
+
+    const parentNode =  event.target.closest('.list-group-item')
+    parentNode.remove()
+
     //Проверка. Если в списке задач есть один элемент, показываем блок "Список дел пуст"
     if(tasksList.children.length === 1) {
         emptyList.classList.remove('none')
     };
+    saveHTMLtoLs()
 }
 
 function doneTask() {
-    //Проверяем что клик был по кнопке выполненно
-    if(event.target.dataset.action === 'done') {
-        const parentNode = event.target.closest('.list-group-item');
-     const taskTitle = parentNode.querySelector('.task-title')
-     taskTitle.classList.toggle('task-title--done')
-    }
+    //Проверяем что клик был НЕ по кнопке выполненно Задача выполнена
+    if(event.target.dataset.action !== 'done') return;
+//Проверяем что клик был по кнопке выполненно Задача выполнена
+    const parentNode = event.target.closest('.list-group-item');
+    const taskTitle = parentNode.querySelector('.task-title')
+    taskTitle.classList.toggle('task-title--done')
+    saveHTMLtoLs()
+}
+
+function saveHTMLtoLs() {
+    localStorage.setItem('tasksHTML', tasksList.innerHTML)
 }
